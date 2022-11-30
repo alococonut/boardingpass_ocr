@@ -3,10 +3,11 @@ import cv2
 import numpy as np
 import os
 import zxingcpp
+import fitz
 from fastapi import APIRouter, Form, UploadFile, File
 from paddleocr import PaddleOCR
 from starlette.responses import JSONResponse
-from routers.ocr_tools import boardingpass_ocr,Barcode_detect
+from routers.ocr_tools import boardingpass_ocr,Barcode_detect, receipt_ocr
 from commons import utils
 from commons.constants import STATUS_SUCCESS, STATUS_UNKNOWN_ERROR
 from commons.logger import logger as logging
@@ -67,8 +68,6 @@ def my_mykad_front(client_no: str = Form(alias='clientRefNum'),
 def my_mykad_front(image_front: UploadFile = File()):
     content_front = image_front.file.read()
     img_front = cv2.imdecode(np.fromstring(content_front, np.uint8), cv2.IMREAD_UNCHANGED)
-
-
     ocr_1 = boardingpass_ocr.ocr(input=img_front,model=ocr_model)
     ocr_result = ocr_1.processs()
 
@@ -84,6 +83,19 @@ def my_mykad_front(image_front: UploadFile = File()):
     output = {'ocr':ocr_result,'barcode':barcode_results}
 
     return JSONResponse(content=output)
+
+
+@router.post("/receipt")
+def car_receipt(image:UploadFile = File(),
+                filetype:str = Form(alias='filetype')):
+    content = image.file.read()
+    name = image.filename
+    recep = receipt_ocr.receipt(input=content,model=ocr_model,name=name)
+    output = recep.chose_file()
+
+
+    return JSONResponse(content = {'text':output})
+
 
 
 
