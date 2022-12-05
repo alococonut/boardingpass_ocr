@@ -119,9 +119,17 @@ class receipt():
         recep_info['start_time'],recep_info['end_time'] = time_list[0],time_list[1]
         recep_info['date']=date_list[0]
 
-        for i in result:
-            if 'Km' in i[1][0]:
-                recep_info['Distance'] = i[1][0]
+        for i in result[0]:
+            if re.search(r'\d+\s*Km',i[1][0]) or re.search(r'\d+\s*km',i[1][0]):
+                recep_info['Distance'] = i[1][0].replace(',','.')
+            elif re.search(r'.*\d\d\d.*d',i[1][0]):
+                recep_info['fare'] = i[1][0].replace('=','').replace(' ','')
+        
+        if 'Bluebird' in text:
+            recep_info['fare'] = result[0][-1][1][0].replace('=','').replace(' ','')
+        
+        
+
         
         return recep_info
             
