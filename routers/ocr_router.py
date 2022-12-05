@@ -86,8 +86,7 @@ def my_mykad_front(image_front: UploadFile = File()):
 
 
 @router.post("/receipt")
-def car_receipt(image:UploadFile = File(),
-                filetype:str = Form(alias='filetype')):
+def car_receipt(image:UploadFile = File()):
     content = image.file.read()
     name = image.filename
     recep = receipt_ocr.receipt(input=content,model=ocr_model,name=name)
