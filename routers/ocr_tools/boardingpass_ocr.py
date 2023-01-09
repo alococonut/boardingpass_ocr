@@ -20,7 +20,7 @@ class ocr():
         #     elif rotation_angle == 270:
         #             self.image = cv2.rotate(self.image, cv2.ROTATE_90_COUNTERCLOCKWISE)
         
-        result = self.model.ocr(self.image)
+        result = self.model.ocr(self.image)[0]
         content_list = [i[1][0] for i in result]
         content = ' '.join(content_list)
 

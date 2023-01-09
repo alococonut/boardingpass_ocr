@@ -7,7 +7,7 @@ import fitz
 from fastapi import APIRouter, Form, UploadFile, File
 from paddleocr import PaddleOCR
 from starlette.responses import JSONResponse
-from routers.ocr_tools import boardingpass_ocr,Barcode_detect, receipt_ocr
+from routers.ocr_tools import boardingpass_ocr,Barcode_detect, receipt_ocr, Passport_OCR
 from commons import utils
 from commons.constants import STATUS_SUCCESS, STATUS_UNKNOWN_ERROR
 from commons.logger import logger as logging
@@ -95,6 +95,13 @@ def car_receipt(image:UploadFile = File()):
 
     return JSONResponse(content = {'text':output})
 
+@router.post("/passport")
+def passport(image:UploadFile = File()):
+    content = image.file.read()
+    output = Passport_OCR.sg_passport(image=content,ocr_model=PaddleOCR(lang="en"))
+
+
+    return JSONResponse(content = {'text':output})
 
 
 
