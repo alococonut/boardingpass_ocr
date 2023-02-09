@@ -8,9 +8,14 @@ from fastapi import APIRouter, Form, UploadFile, File
 from paddleocr import PaddleOCR
 from starlette.responses import JSONResponse
 from routers.ocr_tools import boardingpass_ocr,Barcode_detect, receipt_ocr, Passport_OCR
+from routers.ocr_tools.Sg_IC import sg_IC
+from routers.ocr_tools.Sg_EP import sg_EP
 from commons import utils
 from commons.constants import STATUS_SUCCESS, STATUS_UNKNOWN_ERROR
 from commons.logger import logger as logging
+from typing import List
+from pydantic import BaseModel
+import ast
 
 
 router = APIRouter(
@@ -99,10 +104,22 @@ def car_receipt(image:UploadFile = File()):
 def passport(image:UploadFile = File()):
     content = image.file.read()
     output = Passport_OCR.sg_passport(image=content,ocr_model=PaddleOCR(lang="en"))
-
-
     return JSONResponse(content = {'text':output})
 
+@router.post("/Sg_IC")
+def Sg_IC(IC_file:UploadFile = File(),
+          label_list: str = Form(alias='label_list')):
+    IC_file = IC_file.file.read()
+    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_UNCHANGED)
+    label_list2 = ast.literal_eval(label_list)
+    output = sg_IC(IC_file=IC_file,label_list=label_list2)
+    return JSONResponse(content = {'text':output})
 
-
-
+@router.post("/Sg_EP")
+def Sg_EP(IC_file:UploadFile = File(),
+          label_list: str = Form(alias='label_list')):
+    IC_file = IC_file.file.read()
+    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_UNCHANGED)
+    label_list2 = ast.literal_eval(label_list)
+    output = sg_EP(IC_file=IC_file,label_list=label_list2)
+    return JSONResponse(content = {'text':output})

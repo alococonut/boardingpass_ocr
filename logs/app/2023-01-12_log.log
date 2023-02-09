@@ -1,5 +1,0 @@
-2023-01-12 13:48:50.996 | INFO | 92772 | 8663180800 | 49272fcf65bb4b7f984fdeb81d1c5f89 | main.py:startup_event:63 | msg: app startup
-2023-01-12 13:48:58.839 | WARNING | 92772 | 13189427200 | 52373e0dde474fc18a91a14500618362 | paddleocr.py:ocr:519 | msg: Since the angle classifier is not initialized, the angle classifier will not be uesd during the forward process
-2023-01-12 13:49:11.688 | WARNING | 92772 | 13189427200 | 4983bcfada99470e99d63e88323b3f54 | paddleocr.py:ocr:519 | msg: Since the angle classifier is not initialized, the angle classifier will not be uesd during the forward process
-2023-01-12 13:49:40.787 | WARNING | 92772 | 13189427200 | b633a71d57964d70ac38e143ea85367c | paddleocr.py:ocr:519 | msg: Since the angle classifier is not initialized, the angle classifier will not be uesd during the forward process
-2023-01-12 13:50:22.213 | WARNING | 92772 | 13189427200 | 1ac3f3f886ea4fb38427a13f7ab0145a | paddleocr.py:ocr:519 | msg: Since the angle classifier is not initialized, the angle classifier will not be uesd during the forward process
