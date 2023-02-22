@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse
 from routers.ocr_tools import boardingpass_ocr,Barcode_detect, receipt_ocr, Passport_OCR
 from routers.ocr_tools.Sg_IC import sg_IC
 from routers.ocr_tools.Sg_EP import sg_EP
+from routers.ocr_tools.credit_card import credit_kard
 from commons import utils
 from commons.constants import STATUS_SUCCESS, STATUS_UNKNOWN_ERROR
 from commons.logger import logger as logging
@@ -110,7 +111,7 @@ def passport(image:UploadFile = File()):
 def Sg_IC(IC_file:UploadFile = File(),
           label_list: str = Form(alias='label_list')):
     IC_file = IC_file.file.read()
-    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_UNCHANGED)
+    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_COLOR)
     label_list2 = ast.literal_eval(label_list)
     output = sg_IC(IC_file=IC_file,label_list=label_list2)
     return JSONResponse(content = {'text':output})
@@ -119,7 +120,15 @@ def Sg_IC(IC_file:UploadFile = File(),
 def Sg_EP(IC_file:UploadFile = File(),
           label_list: str = Form(alias='label_list')):
     IC_file = IC_file.file.read()
-    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_UNCHANGED)
+    IC_file = cv2.imdecode(np.fromstring(IC_file, np.uint8), cv2.IMREAD_COLOR)
     label_list2 = ast.literal_eval(label_list)
     output = sg_EP(IC_file=IC_file,label_list=label_list2)
+    return JSONResponse(content = {'text':output})
+
+@router.post("/credit_card")
+def CC(card_file:UploadFile = File()):
+    print(type(card_file))
+    card_file = card_file.file.read()
+    card_file = cv2.imdecode(np.fromstring(card_file, np.uint8), cv2.IMREAD_COLOR)
+    output = credit_kard(card_file)
     return JSONResponse(content = {'text':output})
